@@ -36,6 +36,11 @@
   </UserControl.Resources>
 
   <Grid Margin="20">
+
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition />
+    </Grid.RowDefinitions>
     <DockPanel HorizontalAlignment="Left" VerticalAlignment="Top">
       <Button
         Height="155"
@@ -45,6 +50,7 @@
         Cursor="Hand">
         <Image Source="pack://application:,,,/Resources/Cards/red_back.png" />
       </Button>
+
       <ListView
         Background="Transparent"
         BorderThickness="0"
@@ -71,7 +77,7 @@
           </Style>
         </ListView.ItemContainerStyle>
 
-        <ListBox.Template>
+        <ListView.Template>
           <ControlTemplate>
             <Border
               Padding="0,0,55,0"
@@ -80,7 +86,7 @@
               <ItemsPresenter />
             </Border>
           </ControlTemplate>
-        </ListBox.Template>
+        </ListView.Template>
 
         <ListView.ItemTemplate>
           <DataTemplate>
@@ -98,5 +104,76 @@
         </ListView.ItemTemplate>
       </ListView>
     </DockPanel>
+
+    <ListView
+      Grid.Row="1"
+      Margin="0 -150 0 0"
+      VerticalContentAlignment="Center"
+      Background="Transparent"
+      BorderThickness="0"
+      ItemsSource="{Binding CardsTable}">
+      <ListView.ItemsPanel>
+        <ItemsPanelTemplate>
+          <VirtualizingStackPanel Orientation="Horizontal" />
+        </ItemsPanelTemplate>
+      </ListView.ItemsPanel>
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ListView
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="Transparent"
+            BorderThickness="0"
+            ItemsSource="{Binding}">
+            <!--<ListView.ItemsPanel>
+        <ItemsPanelTemplate>
+          <VirtualizingStackPanel Orientation="Vertical" />
+        </ItemsPanelTemplate>
+      </ListView.ItemsPanel>
+
+      <ListView.ItemContainerStyle>
+        <Style TargetType="ListViewItem">
+          <Setter Property="Template">
+            <Setter.Value>
+              <ControlTemplate TargetType="{x:Type ListViewItem}">
+                <StackPanel>
+                  <Canvas Width="25">
+                    <ContentPresenter />
+                  </Canvas>
+                </StackPanel>
+              </ControlTemplate>
+            </Setter.Value>
+          </Setter>
+        </Style>
+      </ListView.ItemContainerStyle>-->
+
+            <ListView.Template>
+              <ControlTemplate>
+                <Border BorderBrush="Gray" BorderThickness="0">
+                  <ItemsPresenter />
+                </Border>
+              </ControlTemplate>
+            </ListView.Template>
+
+            <ListView.ItemTemplate>
+              <DataTemplate>
+                <Button
+                  Margin="0,-130,0,0"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  Command="{Binding GetAvailableCardsCommand}"
+                  Cursor="Hand">
+                  <!--<Button.InputBindings>
+                <MouseBinding Command="{Binding SquareRightClickedCommand}" Gesture="RightClick" />
+              </Button.InputBindings>-->
+                  <Image Height="150" Source="{Binding DisplayedImage}" />
+                </Button>
+              </DataTemplate>
+            </ListView.ItemTemplate>
+          </ListView>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+
   </Grid>
 </UserControl>

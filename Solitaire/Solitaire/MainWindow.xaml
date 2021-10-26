@@ -9,6 +9,7 @@
   Title="MainWindow"
   Width="800"
   Height="450"
+  WindowState="Maximized"
   mc:Ignorable="d">
 
   <Grid>

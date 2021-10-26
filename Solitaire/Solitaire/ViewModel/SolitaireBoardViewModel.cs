@@ -34,6 +34,21 @@ namespace Solitaire.ViewModel
         OnPropertyChanged();
       }
     }
+
+    private ObservableCollection<ObservableCollection<Card>> _cardsTable;
+
+    public ObservableCollection<ObservableCollection<Card>> CardsTable
+    {
+      get
+      {
+        return _cardsTable;
+      }
+      set
+      {
+        _cardsTable = value;
+        OnPropertyChanged();
+      }
+    }
     public SolitaireBoardViewModel()
     {
       InitializeBoard();
@@ -42,6 +57,18 @@ namespace Solitaire.ViewModel
     private void InitializeBoard()
     {
       InitializeAvailableCards();
+      InitializeTableCards();
+    }
+
+    private void InitializeTableCards()
+    {
+      CardsTable = new ObservableCollection<ObservableCollection<Card>>();
+      for (int i = 0; i < 7; i++)
+      {
+
+        CardsTable.Add(new ObservableCollection<Card>(CardsManager.GetRandomCards(i + 1)));
+
+      }
     }
 
     private void InitializeAvailableCards()
@@ -51,6 +78,8 @@ namespace Solitaire.ViewModel
       AvailableCards = new ObservableCollection<Card>(CardsManager.GetRandomCards(24));
     }
     int index = 0;
+
+
     private void GetAvailableCardsCommandReceived()
     {
 
