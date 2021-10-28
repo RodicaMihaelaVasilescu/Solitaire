@@ -65,6 +65,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\MarginConverter.cs" />
+    <Compile Include="Converter\DisplayFlippedCardConverter.cs" />
     <Compile Include="Helper\CardsImageSourceConstants.cs" />
     <Compile Include="Helper\CardsManager.cs" />
     <Compile Include="Model\BindableBase.cs" />
@@ -177,6 +179,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\red_back.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Cards\placeholder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

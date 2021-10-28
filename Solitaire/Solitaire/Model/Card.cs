@@ -8,13 +8,13 @@ namespace Solitaire.Model
 {
   public class Card : BindableBase
   {
+    private Card _selectedCard;
+
     public Guid Id { get; set; }
 
     public string Value { get; set; }
 
     public int Size { get; set; } = 150;
-
-    private string _displayedImage;
 
     public string DisplayedImage
     {
@@ -22,11 +22,24 @@ namespace Solitaire.Model
       {
         return string.Format("../../Resources/Cards/{0}.png", Value);
       }
-      //set
-      //{
-      //  _displayedImage = value;
-      //  OnPropertyChanged();
-      //}
     }
+
+
+    public Card SelectedCard
+    {
+      get
+      {
+        return _selectedCard;
+      }
+      set
+      {
+        _selectedCard = value;
+        OnPropertyChanged();
+      }
+    }
+
+
+    public int Index { get; set; }
+    public bool IsFlipped { get; internal set; }
   }
 }

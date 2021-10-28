@@ -34,6 +34,19 @@ namespace Solitaire.ViewModel
         OnPropertyChanged();
       }
     }
+    
+    public ObservableCollection<Card> Placeholders
+    {
+      get
+      {
+        return _placeholders;
+      }
+      set
+      {
+        _placeholders = value;
+        OnPropertyChanged();
+      }
+    }
 
     private ObservableCollection<ObservableCollection<Card>> _cardsTable;
 
@@ -58,6 +71,24 @@ namespace Solitaire.ViewModel
     {
       InitializeAvailableCards();
       InitializeTableCards();
+      InitializePlaceholders();
+
+    }
+
+    private void InitializePlaceholders()
+    {
+      Placeholders = new ObservableCollection<Card>();
+      for (int i = 0; i < 4; i++)
+      {
+        var id = Guid.NewGuid();
+        Placeholders.Add(new Card
+        {
+          Id = id,
+          Index = i,
+          Value = "placeholder"
+        });
+
+      }
     }
 
     private void InitializeTableCards()
@@ -65,7 +96,6 @@ namespace Solitaire.ViewModel
       CardsTable = new ObservableCollection<ObservableCollection<Card>>();
       for (int i = 0; i < 7; i++)
       {
-
         CardsTable.Add(new ObservableCollection<Card>(CardsManager.GetRandomCards(i + 1)));
 
       }
@@ -78,7 +108,8 @@ namespace Solitaire.ViewModel
       AvailableCards = new ObservableCollection<Card>(CardsManager.GetRandomCards(24));
     }
     int index = 0;
-
+    private ObservableCollection<Card> _placeholders;
+    private Card _selectedCard;
 
     private void GetAvailableCardsCommandReceived()
     {

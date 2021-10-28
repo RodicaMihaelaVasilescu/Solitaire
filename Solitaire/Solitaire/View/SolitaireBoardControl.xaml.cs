@@ -25,4 +25,5 @@ namespace Solitaire.View
       InitializeComponent();
     }
   }
+
 }

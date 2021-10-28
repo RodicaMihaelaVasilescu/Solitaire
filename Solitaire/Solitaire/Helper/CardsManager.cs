@@ -59,7 +59,9 @@ namespace Solitaire.Manager
         list.Add(new Card
         {
           Id = id,
-          Value = cards[randomIndex]
+          Index = i,
+          Value = cards[randomIndex],
+          IsFlipped = i != number - 1
         });
         cards.Remove(cards[randomIndex]);
       }
