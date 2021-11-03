@@ -65,17 +65,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\DisplayMainRegionConverter.cs" />
     <Compile Include="Converter\DisplayPlaceholderCardConverter.cs" />
     <Compile Include="Converter\MarginConverter.cs" />
     <Compile Include="Converter\DisplayFlippedCardConverter.cs" />
     <Compile Include="Converter\MultiBindingConverter.cs" />
     <Compile Include="Helper\CardsImageSourceConstants.cs" />
     <Compile Include="Helper\CardsManager.cs" />
+    <Compile Include="Model\AvailablePileOfCardsRegion.cs" />
     <Compile Include="Model\BindableBase.cs" />
     <Compile Include="Model\Card.cs" />
-    <Compile Include="Model\SelectedCardModel.cs" />
+    <Compile Include="Model\ListOfCards.cs" />
+    <Compile Include="Model\MainPileOfCardsRegion.cs" />
+    <Compile Include="Model\RegionBase.cs" />
+    <Compile Include="Model\SelectedRegion.cs" />
+    <Compile Include="Model\TargetPileOfCardsRegion.cs" />
     <Compile Include="ViewModel\SolitaireBoardViewModel.cs" />
-    <Compile Include="ViewModel\CardViewModel.cs" />
     <Compile Include="View\SolitaireBoardControl.xaml.cs">
       <DependentUpon>SolitaireBoardControl.xaml</DependentUpon>
     </Compile>

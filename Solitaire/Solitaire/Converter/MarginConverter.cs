@@ -16,11 +16,11 @@ namespace Solitaire.Converter
       string cardValue = card == null ? string.Empty : card.Value;
       if (cardValue == (string)value[0])
       {
-        return new Thickness(0);
+        return new Thickness(5, 0, 5, 0);
       }
       else
       {
-        return new Thickness(0, -130, 0, 0);
+        return new Thickness(5, -130, 5, 0);
       }
     }
 

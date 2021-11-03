@@ -15,17 +15,8 @@ namespace Solitaire.Converter
   {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
-      var index = (int)values[1];
-      var cards = (IEnumerable<IEnumerable<Card>>)values[0];
-      var list = cards.ElementAt(index);
-      return new BitmapImage(new Uri(string.Format("pack://application:,,,/Resources/Cards/{0}.png", list.Last().Value)));
-
-      //}
-      //else
-      //{
-      //  return new BitmapImage(new Uri(string.Format("pack://application:,,,/Resources/Cards/{0}.png", value)));
-
-      //}
+      var cards = (IEnumerable<Card>)values[0];
+      return new BitmapImage(new Uri(string.Format("pack://application:,,,/Resources/Cards/{0}.png", cards.Last().Value)));
     }
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

@@ -10,7 +10,7 @@ namespace Solitaire.Model
   {
     public Guid Id { get; set; }
 
-    public string Value { get; set; }
+    public string Value { get; set; } = "placeholder";
 
     public int Size { get; set; } = 150;
 
@@ -22,7 +22,8 @@ namespace Solitaire.Model
       }
     }
 
-    public int Index { get; set; }
-    public bool IsFlipped { get;  set; }
+    public bool IsFlipped { get; set; }
+
+    public bool FrontImageDisplayed { get; set; }
   }
 }

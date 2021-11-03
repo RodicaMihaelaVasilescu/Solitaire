@@ -14,253 +14,109 @@ namespace Solitaire.ViewModel
 {
   public class SolitaireBoardViewModel : BindableBase
   {
+    public AvailablePileOfCardsRegion AvailablePileOfCards { get; set; }
+
+    public TargetPileOfCardsRegion TargetPileOfCards { get; set; }
+
+    public MainPileOfCardsRegion MainPileOfCards { get; set; }
 
     public ICommand ShuffleAvailableCardsCommand { get; set; }
 
     public ICommand GetAvailableCardsCommand { get; set; }
 
-    public ObservableCollection<Card> AvailableCards;
-
-    private ObservableCollection<Card> _threeAvailableCards;
-
-    public ObservableCollection<Card> ThreeAvailableCards
-    {
-      get
-      {
-        return _threeAvailableCards;
-      }
-      set
-      {
-        _threeAvailableCards = value;
-        OnPropertyChanged();
-      }
-    }
-
-    public ObservableCollection<ObservableCollection<Card>> Placeholders
-    {
-      get
-      {
-        return _placeholders;
-      }
-      set
-      {
-        _placeholders = value;
-        OnPropertyChanged();
-      }
-    }
-
-    private ObservableCollection<ObservableCollection<Card>> _cardsTable;
-
-    public ObservableCollection<ObservableCollection<Card>> CardsTable
-    {
-      get
-      {
-        return _cardsTable;
-      }
-      set
-      {
-        _cardsTable = value;
-        OnPropertyChanged();
-      }
-    }
-
     public ICommand SelectedCardChangedCommand { get; set; }
-
-    public SelectedCardModel SelectedCard
-    {
-      get
-      {
-        return _selectedCard;
-      }
-      set
-      {
-        _selectedCard = value;
-        OnPropertyChanged();
-      }
-    }
+    public SelectedRegion previousRegion { get; private set; }
 
     public SolitaireBoardViewModel()
     {
+      SelectedCardChangedCommand = new DelegateCommand<object>(SelectedCardChangedCommandExecute);
+      ShuffleAvailableCardsCommand = new DelegateCommand(ShuffleAvailableCardsCommandReceived);
+      GetAvailableCardsCommand = new DelegateCommand(GetAvailableCardsCommandReceived);
       InitializeBoard();
     }
 
     private void InitializeBoard()
     {
-      SelectedCardChangedCommand = new DelegateCommand<object>(SelectedCardChangedCommandExecute);
-      InitializeAvailableCards();
-      InitializeTableCards();
-      InitializePlaceholders();
+      MainPileOfCards = new MainPileOfCardsRegion();
+      AvailablePileOfCards = new AvailablePileOfCardsRegion();
+      TargetPileOfCards = new TargetPileOfCardsRegion();
 
     }
 
     private void SelectedCardChangedCommandExecute(object parameter)
     {
       var values = (object[])parameter;
-      var currentSelectedCard = new SelectedCardModel
+
+      var currentRegion = new SelectedRegion
       {
-        CardValue = (string)values[0],
-        RegionName = (string)values[1],
-        IsFlipped = (bool)values[2],
-        Index = (int)values[3]
+        Name = (string)values[0],
+        Index = (int)values[1],
+        CardValue = values[2].ToString()
       };
 
-      if (currentSelectedCard.RegionName == "Placeholder")
+      if (previousRegion == null)
       {
-        var placeholder = Placeholders[currentSelectedCard.Index];
-        if (placeholder.Last().Value == "placeholder" && SelectedCard.CardValue[0] == 'A' ||
-          CardsManager.AreConsecutiveCards(placeholder.Last().Value, SelectedCard.CardValue) && SelectedCard.CardValue.Last() == placeholder.Last().Value.Last())
-        {
-          if (SelectedCard.RegionName == "DisplayedCards")
-          {
-            var list = CardsTable.First(l => l.Any(c => c.Value == SelectedCard.CardValue));
-            var card = list.First(c => c.Value == SelectedCard.CardValue);
-            placeholder.Add(card);
-            list.Remove(card);
-            if (list.Any() && list.Last().IsFlipped == true)
-            {
-              list.Last().IsFlipped = false;
-              CollectionViewSource.GetDefaultView(CardsTable).Refresh();
-            }
-          }
-          else if (SelectedCard.RegionName == "ThreeAvailableCards")
-          {
-            var card = ThreeAvailableCards.Where(c => c.Value == SelectedCard.CardValue).First();
-            placeholder.Add(card);
-            ThreeAvailableCards.Remove(card);
-            AvailableCards.Remove(card);
-            CollectionViewSource.GetDefaultView(ThreeAvailableCards).Refresh();
-          }
-          CollectionViewSource.GetDefaultView(Placeholders).Refresh();
-        }
+        previousRegion = currentRegion;
+        return;
       }
 
-      if (SelectedCard != null)
+      if (currentRegion.Name == "TargetPileOfCards" && previousRegion.CardValue != "placeholder")
       {
-        if (SelectedCard.RegionName == "DisplayedCards" && currentSelectedCard.RegionName == "DisplayedCards")
+        currentRegion.CardValue = TargetPileOfCards.GetLastCardByListIndex(currentRegion.Index);
+        if (previousRegion.Name == "MainPileOfCards")
         {
-          if (CardsManager.IsValidConfiguration(SelectedCard, currentSelectedCard))
+          if (MainPileOfCards.IsLastCard(previousRegion.CardValue, previousRegion.Index) &&
+            CardsManager.AreConsecutiveCards(currentRegion.CardValue, previousRegion.CardValue)
+            && CardsManager.HasTheSameSuit(currentRegion.CardValue, previousRegion.CardValue))
           {
-            //if(currentSelectedCard.CardValue == "placeholder")
-            //{
-            //  var card = CardsTable[currentSelectedCard.Index].First();
-            //  CardsTable[currentSelectedCard.Index].Remove(card);
-            //}
-            MoveCards(SelectedCard, currentSelectedCard);
-            SelectedCard = null;
+            TargetPileOfCards.Add(previousRegion.CardValue, currentRegion.Index);
+            MainPileOfCards.Remove(previousRegion.CardValue, previousRegion.Index);
           }
-          //else if (SelectedCard.CardValue.First() == 'K' && currentSelectedCard.CardValue == "placeholder")
-          //{
-          //  var list = CardsTable.First(l => l.Any(c => c.Value == SelectedCard.CardValue));
-          //  var card = list.First(c => c.Value == SelectedCard.CardValue);
-          //  CardsTable[currentSelectedCard.Index].Add(card);
-          //  list.Remove(card);
-          //  return;
-          //}
         }
-        else if (SelectedCard.RegionName == "ThreeAvailableCards" && currentSelectedCard.RegionName == "DisplayedCards")
+        if (previousRegion.Name == "AvailablePileOfCards")
         {
-          if (CardsManager.IsValidConfiguration(SelectedCard, currentSelectedCard))
+          if (/*AvailablePileOfCards.IsLastCard(previousRegion.CardValue) &&*/
+            CardsManager.AreConsecutiveCards(currentRegion.CardValue, previousRegion.CardValue) &&
+            CardsManager.HasTheSameSuit(currentRegion.CardValue, previousRegion.CardValue))
           {
-            var card = ThreeAvailableCards.Where(v => v.Value == SelectedCard.CardValue).First();
-            card.IsFlipped = false;
-            CardsTable.Where(l => l.Any(c => c.Value == currentSelectedCard.CardValue)).First().Add(card);
-            ThreeAvailableCards.Remove(card);
-            AvailableCards.Remove(card);
-            SelectedCard = null;
+            TargetPileOfCards.Add(previousRegion.CardValue, currentRegion.Index);
+            AvailablePileOfCards.Remove(previousRegion.CardValue);
           }
         }
       }
 
-      SelectedCard = currentSelectedCard;
-
-    }
-
-    private void MoveCards(SelectedCardModel selectedCard, SelectedCardModel currentSelectedCard)
-    {
-      int sourceIndex = 0;
-      ObservableCollection<Card> sourceObsCollection = null, destinationObsCollection = null;
-      var sourceList = new List<Card>();
-      int cnt = 0;
-      foreach (var listOfCards in CardsTable)
+      if (currentRegion.Name == "MainPileOfCards")
       {
-        int index = 0;
-        foreach (var card in listOfCards)
+        if (previousRegion.Name == "MainPileOfCards")
         {
-          if (card.Value == selectedCard.CardValue)
+          if (CardsManager.IsValidConfiguration(previousRegion, currentRegion))
           {
-            sourceObsCollection = listOfCards;
-            sourceList = listOfCards.ToList().GetRange(index, listOfCards.Count() - index);
-            sourceIndex = cnt;
+            MainPileOfCards.MoveCards(previousRegion, currentRegion);
+            previousRegion = null;
+            currentRegion = null;
+            return;
           }
-          if (card.Value == currentSelectedCard.CardValue)
+          else if (previousRegion.CardValue.First() == 'K' && currentRegion.CardValue == "placeholder")
           {
-            destinationObsCollection = listOfCards;
-            if (card != listOfCards.Last())
-            {
-              return;
-            }
+            MainPileOfCards.MoveCards(previousRegion, currentRegion);
+            return;
           }
-          index++;
         }
-        cnt++;
-      }
-
-      foreach (var card in sourceList)
-      {
-        destinationObsCollection.Add(card);
-        sourceObsCollection.Remove(card);
-      }
-      if (sourceObsCollection.Any())
-      {
-        sourceObsCollection.Last().IsFlipped = false;
-        CollectionViewSource.GetDefaultView(CardsTable).Refresh();
-      }
-      if (!sourceObsCollection.Any())
-      {
-        sourceObsCollection.Add(new Card
+        else if (previousRegion.Name == "AvailablePileOfCards")
         {
-          Value = "placeholder",
-          Index = sourceIndex
-        });
-      }
-    }
-
-    private void InitializePlaceholders()
-    {
-      Placeholders = new ObservableCollection<ObservableCollection<Card>>();
-
-      for (int i = 0; i < 4; i++)
-      {
-        var id = Guid.NewGuid();
-        Placeholders.Add(new ObservableCollection<Card>{new Card
-        {
-          Id = id,
-          Index = i,
-          Value = "placeholder"
-        }});
+          if (/*AvailablePileOfCards.IsLastCard(previousRegion.CardValue) &&*/
+            CardsManager.IsValidConfiguration(previousRegion, currentRegion))
+          {
+            MainPileOfCards.Add(previousRegion.CardValue, currentRegion.Index);
+            AvailablePileOfCards.Remove(previousRegion.CardValue);
+          }
+        }
 
       }
-    }
 
-    private void InitializeTableCards()
-    {
-      CardsTable = new ObservableCollection<ObservableCollection<Card>>();
-      for (int i = 0; i < 7; i++)
-      {
-        CardsTable.Add(new ObservableCollection<Card>(CardsManager.GetRandomCards(i + 1)));
+      previousRegion = currentRegion;
 
-      }
     }
-
-    private void InitializeAvailableCards()
-    {
-      ShuffleAvailableCardsCommand = new DelegateCommand(ShuffleAvailableCardsCommandReceived);
-      GetAvailableCardsCommand = new DelegateCommand(GetAvailableCardsCommandReceived);
-      AvailableCards = new ObservableCollection<Card>(CardsManager.GetRandomCards(24));
-    }
-    int index = 0;
-    private ObservableCollection<ObservableCollection<Card>> _placeholders;
-    private SelectedCardModel _selectedCard;
 
     private void GetAvailableCardsCommandReceived()
     {
@@ -269,26 +125,8 @@ namespace Solitaire.ViewModel
 
     private void ShuffleAvailableCardsCommandReceived()
     {
-      if (index + 3 < AvailableCards.Count())
-      {
-        ThreeAvailableCards = new ObservableCollection<Card>
-        {AvailableCards[index], AvailableCards[index+1],AvailableCards[index+2] };
-        index += 3;
-      }
-      else if (index < AvailableCards.Count())
-      {
-        ThreeAvailableCards = new ObservableCollection<Card>
-        {
-          AvailableCards[AvailableCards.Count()-1],
-          AvailableCards[AvailableCards.Count()-2],
-          AvailableCards[AvailableCards.Count()-3] };
-        index += 3;
-      }
-      else
-      {
-        ThreeAvailableCards = new ObservableCollection<Card>();
-        index = 0;
-      }
+      previousRegion = null;
+      AvailablePileOfCards.GetNextThreeCards();
     }
   }
 }

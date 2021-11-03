@@ -15,6 +15,7 @@
     <ResourceDictionary>
 
       <converter:MarginConverter x:Key="MarginConverter" />
+      <converter:DisplayMainRegionConverter x:Key="DisplayMainRegionConverter" />
       <converter:DisplayFlippedCardConverter x:Key="DisplayFlippedCardConverter" />
       <converter:DisplayPlaceholderCardConverter x:Key="DisplayPlaceholderCardConverter" />
       <converter:MultiBindingConverter x:Key="MultiBindingConverter" />
@@ -65,13 +66,12 @@
     </Button>
 
     <ListView
-      x:Name="ThreeAvailableCards"
+      x:Name="AvailablePileOfCards"
       Grid.Column="1"
       MinWidth="250"
       Background="Transparent"
       BorderThickness="0"
-      ItemsSource="{Binding ThreeAvailableCards}"
-      SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=SelectedCard}">
+      ItemsSource="{Binding AvailablePileOfCards.ThreeAvailableCards.Cards}">
       <ListView.ItemsPanel>
         <ItemsPanelTemplate>
           <VirtualizingStackPanel Orientation="Horizontal" />
@@ -118,10 +118,9 @@
             <Image Height="150" Source="{Binding DisplayedImage}" />
             <Button.CommandParameter>
               <MultiBinding Converter="{StaticResource MultiBindingConverter}">
+                <Binding ElementName="AvailablePileOfCards" Path="Name" />
+                <Binding Path="DataContext.AvailablePileOfCards.ThreeAvailableCards.Index" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ListView}" />
                 <Binding Path="Value" />
-                <Binding ElementName="ThreeAvailableCards" Path="Name" />
-                <Binding Path="IsFlipped" />
-                <Binding Path="Index" />
               </MultiBinding>
             </Button.CommandParameter>
           </Button>
@@ -130,12 +129,12 @@
     </ListView>
 
     <ListView
-      x:Name="Placeholder"
+      x:Name="TargetPileOfCards"
       Grid.Column="2"
       Background="Transparent"
       BorderThickness="0"
       ItemContainerStyle="{StaticResource NoItemHighlight}"
-      ItemsSource="{Binding Placeholders}">
+      ItemsSource="{Binding TargetPileOfCards.PilesOfCards}">
       <ListView.ItemsPanel>
         <ItemsPanelTemplate>
           <VirtualizingStackPanel Orientation="Horizontal" />
@@ -151,17 +150,15 @@
             Cursor="Hand">
             <Button.CommandParameter>
               <MultiBinding Converter="{StaticResource MultiBindingConverter}">
-                <Binding Path="Value" />
-                <Binding ElementName="Placeholder" Path="Name" />
-                <Binding Path="IsFlipped" />
+                <Binding ElementName="TargetPileOfCards" Path="Name" />
+                <Binding Path="Index" />
                 <Binding Path="Index" />
               </MultiBinding>
             </Button.CommandParameter>
             <Image Height="150">
               <Image.Source>
                 <MultiBinding Converter="{StaticResource DisplayPlaceholderCardConverter}">
-                  <Binding ElementName="Placeholder" Path="ItemsSource" />
-                  <Binding Path="Index" />
+                  <Binding Path="Cards" />
                 </MultiBinding>
               </Image.Source>
             </Image>
@@ -181,7 +178,7 @@
       Background="Transparent"
       BorderThickness="0"
       ItemContainerStyle="{StaticResource NoItemHighlight}"
-      ItemsSource="{Binding CardsTable}">
+      ItemsSource="{Binding MainPileOfCards.PilesOfCards}">
       <ListView.ItemsPanel>
         <ItemsPanelTemplate>
           <VirtualizingStackPanel Orientation="Horizontal" />
@@ -190,13 +187,14 @@
       <ListView.ItemTemplate>
         <DataTemplate>
           <ListView
-            Name="DisplayedCards"
+            Name="MainPileOfCards"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Background="Transparent"
             BorderThickness="0"
-            ItemsSource="{Binding}"
-            SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SelectedCard}">
+            ItemContainerStyle="{StaticResource NoItemHighlight}"
+            ItemsSource="{Binding Cards}">
+            <!--  SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.SelectedCard}">  -->
 
             <ListView.Template>
               <ControlTemplate>
@@ -216,27 +214,21 @@
                   <Button.Margin>
                     <MultiBinding Converter="{StaticResource MarginConverter}">
                       <Binding Path="Value" />
-                      <Binding ElementName="DisplayedCards" Path="ItemsSource" />
+                      <Binding ElementName="MainPileOfCards" Path="ItemsSource" />
                     </MultiBinding>
                   </Button.Margin>
                   <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource MultiBindingConverter}">
+                      <Binding ElementName="MainPileOfCards" Path="Name" />
+                      <Binding Path="DataContext.Index" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ListView}" />
                       <Binding Path="Value" />
-                      <Binding ElementName="DisplayedCards" Path="Name" />
-                      <Binding Path="IsFlipped" />
-                      <Binding Path="Index" />
                     </MultiBinding>
                   </Button.CommandParameter>
-                  <!--
-                    "{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},
-                    Path=DataContext.AllowItemCommand}"
-                  -->
                   <Image Height="150">
                     <Image.Source>
-                      <MultiBinding Converter="{StaticResource DisplayFlippedCardConverter}">
-                        <Binding Path="IsFlipped" />
+                      <MultiBinding Converter="{StaticResource DisplayMainRegionConverter}">
+                        <Binding Path="FrontImageDisplayed" />
                         <Binding Path="Value" />
-                        <Binding ElementName="DisplayedCards" Path="ItemsSource" />
                       </MultiBinding>
                     </Image.Source>
                   </Image>

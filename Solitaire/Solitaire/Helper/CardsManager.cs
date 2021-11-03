@@ -59,9 +59,7 @@ namespace Solitaire.Manager
         list.Add(new Card
         {
           Id = id,
-          Index = i,
-          Value = cards[randomIndex],
-          IsFlipped = i != number - 1
+          Value = cards[randomIndex]
         });
         cards.Remove(cards[randomIndex]);
       }
@@ -119,10 +117,15 @@ namespace Solitaire.Manager
              previousCards.Last() == 'S' && currentCard.Last() == 'D' ||
              previousCards.Last() == 'S' && currentCard.Last() == 'H' ||
 
-             currentCard == "placeholder";
+             currentCard == "placeholder" || previousCards == "placeholder";
     }
 
-    public static bool IsValidConfiguration(SelectedCardModel previousCards, SelectedCardModel currentCard)
+    internal static bool HasTheSameSuit(string cardValue1, string cardValue2)
+    {
+      return cardValue1.Last() == cardValue2.Last() || cardValue1 == "placeholder";
+    }
+
+    public static bool IsValidConfiguration(SelectedRegion previousCards, SelectedRegion currentCard)
     {
       return AreTheSameColor(previousCards.CardValue, currentCard.CardValue) &&
             AreConsecutiveCards(previousCards.CardValue, currentCard.CardValue);

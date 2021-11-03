@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Solitaire.Model
 {
-  public class SelectedCardModel
+  public class SelectedRegion
   {
     public string CardValue { get; set; }
-    public string RegionName { get; set; }
-    public bool IsFlipped { get; internal set; }
+    public string Name { get; set; }
     public int Index { get; internal set; }
+
   }
 }
