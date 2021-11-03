@@ -67,5 +67,66 @@ namespace Solitaire.Manager
       }
       return list;
     }
+
+    static public int GetCardValue(string card)
+    {
+      if (card == "placeholder")
+      {
+        return 0;
+      }
+      if (card[0] == '1')
+      {
+        return 10;
+      }
+      if (card[0] == 'J')
+      {
+        return 12;
+      }
+      else if (card[0] == 'Q')
+      {
+        return 13;
+      }
+      else if (card[0] == 'K')
+      {
+        return 14;
+      }
+      if (char.IsDigit(card[0]))
+      {
+        return int.Parse(card[0].ToString());
+      }
+
+      return 1;
+    }
+
+    static public bool AreConsecutiveCards(string frontCardValue, string backCardValue)
+    {
+      var backCardInt = GetCardValue(backCardValue);
+      var frontCardInt = GetCardValue(frontCardValue);
+      return backCardInt - frontCardInt == 1 || backCardInt == 12 && frontCardInt == 10 || backCardValue == "placeholder" && frontCardInt == 14;
+    }
+
+    public static bool AreTheSameColor(string previousCards, string currentCard)
+    {
+      return previousCards.Last() == 'H' && currentCard.Last() == 'C' ||
+             previousCards.Last() == 'H' && currentCard.Last() == 'S' ||
+
+             previousCards.Last() == 'D' && currentCard.Last() == 'C' ||
+             previousCards.Last() == 'D' && currentCard.Last() == 'S' ||
+
+             previousCards.Last() == 'C' && currentCard.Last() == 'D' ||
+             previousCards.Last() == 'C' && currentCard.Last() == 'H' ||
+
+             previousCards.Last() == 'S' && currentCard.Last() == 'D' ||
+             previousCards.Last() == 'S' && currentCard.Last() == 'H' ||
+
+             currentCard == "placeholder";
+    }
+
+    public static bool IsValidConfiguration(SelectedCardModel previousCards, SelectedCardModel currentCard)
+    {
+      return AreTheSameColor(previousCards.CardValue, currentCard.CardValue) &&
+            AreConsecutiveCards(previousCards.CardValue, currentCard.CardValue);
+    }
+
   }
 }

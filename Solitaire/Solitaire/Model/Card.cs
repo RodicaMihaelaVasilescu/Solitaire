@@ -8,8 +8,6 @@ namespace Solitaire.Model
 {
   public class Card : BindableBase
   {
-    private Card _selectedCard;
-
     public Guid Id { get; set; }
 
     public string Value { get; set; }
@@ -24,22 +22,7 @@ namespace Solitaire.Model
       }
     }
 
-
-    public Card SelectedCard
-    {
-      get
-      {
-        return _selectedCard;
-      }
-      set
-      {
-        _selectedCard = value;
-        OnPropertyChanged();
-      }
-    }
-
-
     public int Index { get; set; }
-    public bool IsFlipped { get; internal set; }
+    public bool IsFlipped { get;  set; }
   }
 }
