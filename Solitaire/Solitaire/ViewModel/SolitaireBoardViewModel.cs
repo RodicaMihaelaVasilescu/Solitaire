@@ -75,7 +75,7 @@ namespace Solitaire.ViewModel
         }
         if (previousRegion.Name == "AvailablePileOfCards")
         {
-          if (/*AvailablePileOfCards.IsLastCard(previousRegion.CardValue) &&*/
+          if (AvailablePileOfCards.IsLastCard(previousRegion.CardValue) &&
             CardsManager.AreConsecutiveCards(currentRegion.CardValue, previousRegion.CardValue) &&
             CardsManager.HasTheSameSuit(currentRegion.CardValue, previousRegion.CardValue))
           {
@@ -104,7 +104,7 @@ namespace Solitaire.ViewModel
         }
         else if (previousRegion.Name == "AvailablePileOfCards")
         {
-          if (/*AvailablePileOfCards.IsLastCard(previousRegion.CardValue) &&*/
+          if (AvailablePileOfCards.IsLastCard(previousRegion.CardValue) &&
             CardsManager.IsValidConfiguration(previousRegion, currentRegion))
           {
             MainPileOfCards.Add(previousRegion.CardValue, currentRegion.Index);
