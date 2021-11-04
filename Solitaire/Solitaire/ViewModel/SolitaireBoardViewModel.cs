@@ -1,13 +1,8 @@
 ﻿using Prism.Commands;
+using Solitaire.Constants;
 using Solitaire.Manager;
 using Solitaire.Model;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Solitaire.ViewModel
@@ -40,7 +35,6 @@ namespace Solitaire.ViewModel
       MainPileOfCards = new MainPileOfCardsRegion();
       AvailablePileOfCards = new AvailablePileOfCardsRegion();
       TargetPileOfCards = new TargetPileOfCardsRegion();
-
     }
 
     private void SelectedCardChangedCommandExecute(object parameter)
@@ -60,14 +54,14 @@ namespace Solitaire.ViewModel
         return;
       }
 
-      if (currentRegion.Name == "TargetPileOfCards")
+      if (currentRegion.Name == RegionConstants.TargetPileOfCards)
       {
         currentRegion.CardValue = TargetPileOfCards.GetLastCardByListIndex(currentRegion.Index);
       }
 
-      if (currentRegion.Name == "TargetPileOfCards" && previousRegion.CardValue != "placeholder")
+      if (currentRegion.Name == RegionConstants.TargetPileOfCards && previousRegion.CardValue != "placeholder")
       {
-        if (previousRegion.Name == "MainPileOfCards")
+        if (previousRegion.Name == RegionConstants.MainPileOfCards)
         {
           if (MainPileOfCards.IsLastCard(previousRegion.CardValue, previousRegion.Index) &&
             CardsManager.AreConsecutiveCards(currentRegion.CardValue, previousRegion.CardValue)
@@ -79,7 +73,7 @@ namespace Solitaire.ViewModel
             return;
           }
         }
-        if (previousRegion.Name == "AvailablePileOfCards")
+        if (previousRegion.Name == RegionConstants.AvailablePileOfCards)
         {
           if (AvailablePileOfCards.IsLastCard(previousRegion.CardValue) &&
             CardsManager.AreConsecutiveCards(currentRegion.CardValue, previousRegion.CardValue) &&
@@ -93,9 +87,9 @@ namespace Solitaire.ViewModel
         }
       }
 
-      if (currentRegion.Name == "MainPileOfCards")
+      if (currentRegion.Name == RegionConstants.MainPileOfCards)
       {
-        if (previousRegion.Name == "MainPileOfCards")
+        if (previousRegion.Name == RegionConstants.MainPileOfCards)
         {
           if (CardsManager.IsValidConfiguration(previousRegion, currentRegion))
           {
@@ -111,7 +105,7 @@ namespace Solitaire.ViewModel
             return;
           }
         }
-        else if (previousRegion.Name == "AvailablePileOfCards")
+        else if (previousRegion.Name == RegionConstants.AvailablePileOfCards)
         {
           if (AvailablePileOfCards.IsLastCard(previousRegion.CardValue) &&
             CardsManager.IsValidConfiguration(previousRegion, currentRegion))
@@ -122,7 +116,7 @@ namespace Solitaire.ViewModel
             return;
           }
         }
-        else if (previousRegion.Name == "TargetPileOfCards")
+        else if (previousRegion.Name == RegionConstants.TargetPileOfCards)
         {
           if (CardsManager.IsValidConfiguration(previousRegion, currentRegion) &&
             MainPileOfCards.IsLastCard(currentRegion.CardValue, currentRegion.Index))
