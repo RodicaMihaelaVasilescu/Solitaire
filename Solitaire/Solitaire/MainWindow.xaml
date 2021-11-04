@@ -6,7 +6,7 @@
   xmlns:local="clr-namespace:Solitaire"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:view="clr-namespace:Solitaire.View"
-  Title="MainWindow"
+  Title="Solitaire"
   Width="800"
   Height="450"
   WindowState="Maximized"

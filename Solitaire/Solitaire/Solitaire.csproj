@@ -72,7 +72,6 @@
     <Compile Include="Converter\MarginConverter.cs" />
     <Compile Include="Converter\DisplayFlippedCardConverter.cs" />
     <Compile Include="Converter\MultiBindingConverter.cs" />
-    <Compile Include="Helper\CardsImageSourceConstants.cs" />
     <Compile Include="Helper\CardsManager.cs" />
     <Compile Include="Model\AvailablePileOfCardsRegion.cs" />
     <Compile Include="Model\BindableBase.cs" />
