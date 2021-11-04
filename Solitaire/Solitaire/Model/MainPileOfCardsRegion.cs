@@ -93,6 +93,11 @@ namespace Solitaire.Model
         FrontImageDisplayed = true
       });
 
+      Refresh();
+    }
+
+    internal void Refresh()
+    {
       CollectionViewSource.GetDefaultView(PilesOfCards).Refresh();
     }
   }

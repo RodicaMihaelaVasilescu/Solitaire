@@ -32,12 +32,24 @@ namespace Solitaire.Model
       {
         Value = cardValue
       });
-      CollectionViewSource.GetDefaultView(PilesOfCards).Refresh();
+      Refresh();
     }
 
     public string GetLastCardByListIndex(int index)
     {
       return PilesOfCards[index].Cards.Last().Value;
+    }
+
+    internal void Refresh()
+    {
+      CollectionViewSource.GetDefaultView(PilesOfCards).Refresh();
+    }
+
+    internal void RemoveLastCard(int index)
+    {
+      var card = PilesOfCards[index].Cards.Last();
+      PilesOfCards[index].Cards.Remove(card);
+      Refresh();
     }
   }
 }

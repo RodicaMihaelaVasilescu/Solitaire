@@ -62,7 +62,7 @@ namespace Solitaire.Model
       var list = new List<Card>();
       for (int i = index; i < index + 3; i++)
       {
-        if (i < AvailableCards.Cards.Count())
+        if (i >= 0 && i < AvailableCards.Cards.Count())
         {
           list.Add(AvailableCards.Cards[i]);
         }

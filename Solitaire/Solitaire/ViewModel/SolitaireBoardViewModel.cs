@@ -60,9 +60,13 @@ namespace Solitaire.ViewModel
         return;
       }
 
-      if (currentRegion.Name == "TargetPileOfCards" && previousRegion.CardValue != "placeholder")
+      if (currentRegion.Name == "TargetPileOfCards")
       {
         currentRegion.CardValue = TargetPileOfCards.GetLastCardByListIndex(currentRegion.Index);
+      }
+
+      if (currentRegion.Name == "TargetPileOfCards" && previousRegion.CardValue != "placeholder")
+      {
         if (previousRegion.Name == "MainPileOfCards")
         {
           if (MainPileOfCards.IsLastCard(previousRegion.CardValue, previousRegion.Index) &&
@@ -71,6 +75,8 @@ namespace Solitaire.ViewModel
           {
             TargetPileOfCards.Add(previousRegion.CardValue, currentRegion.Index);
             MainPileOfCards.Remove(previousRegion.CardValue, previousRegion.Index);
+            currentRegion = previousRegion = null;
+            return;
           }
         }
         if (previousRegion.Name == "AvailablePileOfCards")
@@ -81,6 +87,8 @@ namespace Solitaire.ViewModel
           {
             TargetPileOfCards.Add(previousRegion.CardValue, currentRegion.Index);
             AvailablePileOfCards.Remove(previousRegion.CardValue);
+            currentRegion = previousRegion = null;
+            return;
           }
         }
       }
@@ -99,6 +107,7 @@ namespace Solitaire.ViewModel
           else if (previousRegion.CardValue.First() == 'K' && currentRegion.CardValue == "placeholder")
           {
             MainPileOfCards.MoveCards(previousRegion, currentRegion);
+            currentRegion = previousRegion = null;
             return;
           }
         }
@@ -109,9 +118,21 @@ namespace Solitaire.ViewModel
           {
             MainPileOfCards.Add(previousRegion.CardValue, currentRegion.Index);
             AvailablePileOfCards.Remove(previousRegion.CardValue);
+            currentRegion = previousRegion = null;
+            return;
           }
         }
-
+        else if (previousRegion.Name == "TargetPileOfCards")
+        {
+          if (CardsManager.IsValidConfiguration(previousRegion, currentRegion) &&
+            MainPileOfCards.IsLastCard(currentRegion.CardValue, currentRegion.Index))
+          {
+            MainPileOfCards.Add(previousRegion.CardValue, currentRegion.Index);
+            TargetPileOfCards.RemoveLastCard(previousRegion.Index);
+            currentRegion = previousRegion = null;
+            return;
+          }
+        }
       }
 
       previousRegion = currentRegion;
@@ -127,6 +148,13 @@ namespace Solitaire.ViewModel
     {
       previousRegion = null;
       AvailablePileOfCards.GetNextThreeCards();
+      RefreshBoard();
+    }
+
+    private void RefreshBoard()
+    {
+      MainPileOfCards.Refresh();
+      TargetPileOfCards.Refresh();
     }
   }
 }
