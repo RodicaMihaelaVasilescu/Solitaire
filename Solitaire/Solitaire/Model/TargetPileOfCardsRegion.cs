@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Solitaire.Constants;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Solitaire.Model
 
       for (int i = 0; i < 4; i++)
       {
-        var placeholder = new List<Card> { new Card { Value = "placeholder" } };
+        var placeholder = new List<Card> { new Card { Value = CardsConstants.Placeholder } };
         PilesOfCards.Add(new ListOfCards(placeholder, i));
       }
     }

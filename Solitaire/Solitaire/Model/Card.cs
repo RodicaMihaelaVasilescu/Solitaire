@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Solitaire.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace Solitaire.Model
   {
     public Guid Id { get; set; }
 
-    public string Value { get; set; } = "placeholder";
+    public string Value { get; set; } = CardsConstants.Placeholder;
 
     public int Size { get; set; } = 150;
 

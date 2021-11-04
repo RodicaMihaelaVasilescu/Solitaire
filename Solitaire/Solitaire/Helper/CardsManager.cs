@@ -1,4 +1,5 @@
-﻿using Solitaire.Model;
+﻿using Solitaire.Constants;
+using Solitaire.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,7 +69,7 @@ namespace Solitaire.Manager
 
     static public int GetCardValue(string card)
     {
-      if (card == "placeholder")
+      if (card == CardsConstants.Placeholder)
       {
         return 0;
       }
@@ -100,7 +101,7 @@ namespace Solitaire.Manager
     {
       var backCardInt = GetCardValue(backCardValue);
       var frontCardInt = GetCardValue(frontCardValue);
-      return backCardInt - frontCardInt == 1 || backCardInt == 12 && frontCardInt == 10 || backCardValue == "placeholder" && frontCardInt == 14;
+      return backCardInt - frontCardInt == 1 || backCardInt == 12 && frontCardInt == 10 || backCardValue == CardsConstants.Placeholder && frontCardInt == 14;
     }
 
     public static bool AreTheSameColor(string previousCards, string currentCard)
@@ -117,12 +118,12 @@ namespace Solitaire.Manager
              previousCards.Last() == 'S' && currentCard.Last() == 'D' ||
              previousCards.Last() == 'S' && currentCard.Last() == 'H' ||
 
-             currentCard == "placeholder" || previousCards == "placeholder";
+             currentCard == CardsConstants.Placeholder || previousCards == CardsConstants.Placeholder;
     }
 
     internal static bool HasTheSameSuit(string cardValue1, string cardValue2)
     {
-      return cardValue1.Last() == cardValue2.Last() || cardValue1 == "placeholder";
+      return cardValue1.Last() == cardValue2.Last() || cardValue1 == CardsConstants.Placeholder;
     }
 
     public static bool IsValidConfiguration(SelectedRegion previousCards, SelectedRegion currentCard)

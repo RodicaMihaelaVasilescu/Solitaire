@@ -59,7 +59,7 @@ namespace Solitaire.ViewModel
         currentRegion.CardValue = TargetPileOfCards.GetLastCardByListIndex(currentRegion.Index);
       }
 
-      if (currentRegion.Name == RegionConstants.TargetPileOfCards && previousRegion.CardValue != "placeholder")
+      if (currentRegion.Name == RegionConstants.TargetPileOfCards && previousRegion.CardValue != CardsConstants.Placeholder)
       {
         if (previousRegion.Name == RegionConstants.MainPileOfCards)
         {
@@ -98,7 +98,7 @@ namespace Solitaire.ViewModel
             currentRegion = null;
             return;
           }
-          else if (previousRegion.CardValue.First() == 'K' && currentRegion.CardValue == "placeholder")
+          else if (previousRegion.CardValue.First() == 'K' && currentRegion.CardValue == CardsConstants.Placeholder)
           {
             MainPileOfCards.MoveCards(previousRegion, currentRegion);
             currentRegion = previousRegion = null;

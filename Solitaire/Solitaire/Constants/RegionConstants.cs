@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Solitaire.Constants
 {
-  static public class Constants
+  static public class RegionConstants
   {
     static public string TargetPileOfCards = "TargetPileOfCards";
     static public string MainPileOfCards = "MainPileOfCards";

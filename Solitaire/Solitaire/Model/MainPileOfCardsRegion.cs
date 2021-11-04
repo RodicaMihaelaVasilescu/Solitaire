@@ -1,10 +1,7 @@
-﻿using Solitaire.Manager;
-using System;
-using System.Collections.Generic;
+﻿using Solitaire.Constants;
+using Solitaire.Manager;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace Solitaire.Model
@@ -36,7 +33,7 @@ namespace Solitaire.Model
       {
         PilesOfCards[index].Cards.Add(new Card
         {
-          Value = "placeholder"
+          Value = CardsConstants.Placeholder
         });
       }
       PilesOfCards[index].Cards.Last().FrontImageDisplayed = true;
@@ -57,7 +54,7 @@ namespace Solitaire.Model
       }
 
       var first = PilesOfCards[destination.Index].Cards.First();
-      if (first.Value == "placeholder")
+      if (first.Value == CardsConstants.Placeholder)
       {
         PilesOfCards[destination.Index].Cards.Remove(first);
       }
@@ -73,7 +70,7 @@ namespace Solitaire.Model
       }
       if (!PilesOfCards[source.Index].Cards.Any())
       {
-        PilesOfCards[source.Index].Cards.Add(new Card { Value = "placeholder" });
+        PilesOfCards[source.Index].Cards.Add(new Card { Value = CardsConstants.Placeholder });
       }
       PilesOfCards[source.Index].Cards.Last().FrontImageDisplayed = true;
       CollectionViewSource.GetDefaultView(PilesOfCards).Refresh();
@@ -83,7 +80,7 @@ namespace Solitaire.Model
     public void Add(string cardValue, int index)
     {
       var first = PilesOfCards[index].Cards.First();
-      if(first.Value == "placeholder")
+      if (first.Value == CardsConstants.Placeholder)
       {
         PilesOfCards[index].Cards.Remove(first);
       }

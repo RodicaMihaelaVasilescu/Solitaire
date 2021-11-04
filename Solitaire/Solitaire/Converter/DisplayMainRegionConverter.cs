@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Solitaire.Constants;
+using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
@@ -11,7 +12,7 @@ namespace Solitaire.Converter
     {
       bool frontImageDisplayed = (bool)values[0];
       string value = (string)values[1];
-      if (frontImageDisplayed || value == "placeholder")
+      if (frontImageDisplayed || value == CardsConstants.Placeholder)
       {
         return new BitmapImage(new Uri(string.Format("pack://application:,,,/Resources/Cards/{0}.png", value)));
       }
